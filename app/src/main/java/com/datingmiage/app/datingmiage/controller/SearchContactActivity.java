@@ -11,6 +11,8 @@ import android.telephony.SmsManager;
 import android.widget.Toast;
 
 import com.datingmiage.app.datingmiage.R;
+import com.datingmiage.app.datingmiage.contactsMultiPickerLibrary.ContactPickerActivity;
+import com.datingmiage.app.datingmiage.contactsMultiPickerLibrary.ContactResult;
 
 import java.util.ArrayList;
 import java.util.regex.Matcher;
