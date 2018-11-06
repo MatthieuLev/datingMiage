@@ -1,17 +1,19 @@
 package com.datingmiage.app.datingmiage.controller;
 
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
-import android.widget.Toast;
 
 import com.datingmiage.app.datingmiage.R;
-import com.stfalcon.smsverifycatcher.OnSmsCatchListener;
-import com.stfalcon.smsverifycatcher.SmsVerifyCatcher;
+import com.datingmiage.app.datingmiage.smsverifycatcherLibrary.OnSmsCatchListener;
+import com.datingmiage.app.datingmiage.smsverifycatcherLibrary.SmsVerifyCatcher;
 
-import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -24,16 +26,34 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        final Context _selft = this;
+
         //init SmsVerifyCatcher
         smsVerifyCatcher = new SmsVerifyCatcher(this, new OnSmsCatchListener<String>() {
             @Override
             public void onSmsCatch(String message) {
-                ArrayList<String> coordonnes = parseCode(message);//Parse verification code
-                // ICI IL FAUT FAIRE LE CODE ACCEPTER OU NON LE RDV
-
+                String coordonnes = parseCode(message);//Parse verification code
+                Log.d("TOAST", coordonnes);
+                new AlertDialog.Builder(_selft)
+                        .setMessage("Voulez vous accepter un rendez-vous au coordonnées : \nLat: " + coordonnes.split(",")[0] + "\nLong: " + coordonnes.split(",")[1])
+                        .setPositiveButton("Oui", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                Intent intent = new Intent(getBaseContext(), MainActivity.class);
+                                startActivity(intent);
+                            }
+                        })
+                        .setNegativeButton("Non", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                Intent intent = new Intent(getBaseContext(), MainActivity.class);
+                                startActivity(intent);
+                            }
+                        })
+                        .show();
             }
         });
-        smsVerifyCatcher.setFilter("/My Location is - \n" + "Lat: +[-+]?\\d{1,3}.\\d{1,10}\n" + "Long: +[-+]?\\d{1,3}.\\d{1,10}/gm");
+        smsVerifyCatcher.setFilter("^([-+]?)([\\d]{1,2})(((\\.)(\\d+)(,)))(\\s*)(([-+]?)([\\d]{1,3})((\\.)(\\d+))?)$");
     }
 
     public void searchContact(View view) {
@@ -57,6 +77,7 @@ public class MainActivity extends AppCompatActivity {
         super.onStop();
         smsVerifyCatcher.onStop();
     }
+
     /**
      * need for Android 6 real time permissions
      */
@@ -72,12 +93,17 @@ public class MainActivity extends AppCompatActivity {
      * @param message sms message
      * @return only four numbers from message string
      */
-    private ArrayList<String> parseCode(String message) {
-        Pattern p = Pattern.compile("/[-+]?\\d{1,3}.\\d{1,10}/gm");
+    private String parseCode(String message) {
+        Log.d("TOAST", message);
+        Pattern p = Pattern.compile("^([-+]?)([\\d]{1,2})(((\\.)(\\d+)(,)))(\\s*)(([-+]?)([\\d]{1,3})((\\.)(\\d+))?)$");
         Matcher m = p.matcher(message);
-        ArrayList<String> coordonnes = new ArrayList<String>();
-        while (m.find()) {
-            coordonnes.add(m.group());
+        String coordonnes = "";
+        boolean b = m.matches();
+        // si recherche fructueuse
+        if (b) {
+            // affichage de la chaîne capturée
+            Log.d("TOAST", m.group());
+            coordonnes = m.group();
         }
         return coordonnes;
     }

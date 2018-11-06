@@ -7,19 +7,15 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.telephony.SmsManager;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import com.datingmiage.app.datingmiage.R;
 
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 public class ContactNumberActivity extends AppCompatActivity {
-    GPSTracker gps;
     private final static int PERMISSION_LOCATION_REQUEST_CODE = 11;
+    GPSTracker gps;
+    Util util;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,39 +26,23 @@ public class ContactNumberActivity extends AppCompatActivity {
 
 
     // send SMS se déclanche lorsque l'on click sur le bouton d'envoi des coordonnées
-    public void sendSMS(View view){
+    public void sendSMS(View view) {
         EditText numeroET = findViewById(R.id.editText);
         String numero = numeroET.getText().toString();
-        // compilation de la regex du numero de telephone français
-        Pattern p = Pattern.compile("^(?:(?:\\+|00)33[\\s.-]{0,3}(?:\\(0\\)[\\s.-]{0,3})?|0)[1-9](?:(?:[\\s.-]?\\d{2}){4}|\\d{2}(?:[\\s.-]?\\d{3}){2})$");
-        // création d'un moteur de recherche
-        Matcher m = p.matcher(numero);
-        // lancement de la recherche de toutes les occurrences
-        boolean b = m.matches();
-        // si recherche fructueuse
-        if (!b) {
-            Toast.makeText(getApplicationContext(), "Number " + numero + " is not valide " + numero, Toast.LENGTH_SHORT).show();
-            return;
-        }
 
-        gps = new GPSTracker(ContactNumberActivity.this);
-
-        // Check if GPS enabled
-        if (gps.canGetLocation()) {
-
-            double latitude = gps.getLatitude();
-            double longitude = gps.getLongitude();
-            String message = "My Location is - \nLat: " + latitude + "\nLong: " + longitude;
-
-
-            SmsManager.getDefault().sendTextMessage(numero, null, message, null, null);
-        } else {
-            // Can't get location.
-            // GPS or network is not enabled.
-            // Ask user to enable GPS/network in settings.
-            gps.showSettingsAlert();
-        }
+        String message = Util.sendSMSForRDV(this, numero);
+        new AlertDialog.Builder(this)
+                .setMessage(message)
+                .setPositiveButton("Retourner au menu principal", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Intent intent = new Intent(getBaseContext(), MainActivity.class);
+                        startActivity(intent);
+                    }
+                })
+                .show();
     }
+
 
     private void showPermissionDialog() {
         if (!GPSTracker.checkPermission(this)) {
