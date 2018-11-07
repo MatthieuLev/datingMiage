@@ -10,7 +10,7 @@ import java.util.regex.Pattern;
 public class Util {
 
     // send SMS se déclanche lorsque l'on click sur le bouton d'envoi des coordonnées
-    public final static String sendSMSForRDV(Context context, String numero) {
+    public  static String sendSMSForRDV(Context context, String numero) {
         String message = "";
         // compilation de la regex du numero de telephone français
         Pattern p = Pattern.compile("^(?:(?:\\+|00)33[\\s.-]{0,3}(?:\\(0\\)[\\s.-]{0,3})?|0)[1-9](?:(?:[\\s.-]?\\d{2}){4}|\\d{2}(?:[\\s.-]?\\d{3}){2})$");

@@ -50,6 +50,10 @@ import android.util.Log;
         getLocation();
     }
 
+    public GPSTracker(){
+        this.mContext = null;
+    }
+
     public Location getLocation() {
         try {
             locationManager = (LocationManager) mContext

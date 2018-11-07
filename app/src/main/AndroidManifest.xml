@@ -26,6 +26,7 @@
         <activity android:name=".controller.ContactNumberActivity" />
         <activity android:name=".controller.SearchContactActivity" />
         <activity android:name=".contactsMultiPickerLibrary.ContactPickerActivity" />
+        
 
         <service
             android:name=".controller.GPSTracker"

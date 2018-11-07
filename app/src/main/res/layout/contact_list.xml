@@ -5,7 +5,7 @@
 
     <fragment
         android:id="@+id/contactListFragment"
-        android:name="com.datingmiage.app.datingmiage.controller.ContactListFragment"
+        android:name="com.datingmiage.app.datingmiage.contactsMultiPickerLibrary.ContactListFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
