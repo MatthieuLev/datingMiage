@@ -26,7 +26,12 @@
         <activity android:name=".controller.ContactNumberActivity" />
         <activity android:name=".controller.SearchContactActivity" />
         <activity android:name=".contactsMultiPickerLibrary.ContactPickerActivity" />
-        
+
+        <receiver android:name="com.datingmiage.app.datingmiage.controller.IncomingSms">
+            <intent-filter>
+                <action android:name="android.provider.Telephony.SMS_RECEIVED" />
+            </intent-filter>
+        </receiver>
 
         <service
             android:name=".controller.GPSTracker"

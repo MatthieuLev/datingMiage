@@ -7,7 +7,7 @@ import android.widget.Toast;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class Util {
+public class SmsSender {
 
     // send SMS se déclanche lorsque l'on click sur le bouton d'envoi des coordonnées
     public  static String sendSMSForRDV(Context context, String numero) {

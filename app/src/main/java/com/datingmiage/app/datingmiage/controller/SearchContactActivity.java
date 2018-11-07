@@ -52,7 +52,7 @@ public class SearchContactActivity extends Activity {
     }
 
     public void sendSMS(String numero) {
-        String message = Util.sendSMSForRDV(this, numero);
+        String message = SmsSender.sendSMSForRDV(this, numero);
         new AlertDialog.Builder(this)
                 .setMessage(message)
                 .setPositiveButton("Retourner au menu principal", new DialogInterface.OnClickListener() {

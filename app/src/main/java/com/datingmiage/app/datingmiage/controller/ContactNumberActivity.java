@@ -14,8 +14,6 @@ import com.datingmiage.app.datingmiage.R;
 
 public class ContactNumberActivity extends AppCompatActivity {
     private final static int PERMISSION_LOCATION_REQUEST_CODE = 11;
-    GPSTracker gps;
-    Util util;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,7 +28,7 @@ public class ContactNumberActivity extends AppCompatActivity {
         EditText numeroET = findViewById(R.id.editText);
         String numero = numeroET.getText().toString();
 
-        String message = Util.sendSMSForRDV(this, numero);
+        String message = SmsSender.sendSMSForRDV(this, numero);
         new AlertDialog.Builder(this)
                 .setMessage(message)
                 .setPositiveButton("Retourner au menu principal", new DialogInterface.OnClickListener() {
