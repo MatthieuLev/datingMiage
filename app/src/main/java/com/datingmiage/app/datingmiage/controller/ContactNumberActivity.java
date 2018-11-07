@@ -1,6 +1,7 @@
 package com.datingmiage.app.datingmiage.controller;
 
 import android.Manifest;
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -13,13 +14,12 @@ import android.widget.EditText;
 import com.datingmiage.app.datingmiage.R;
 
 public class ContactNumberActivity extends AppCompatActivity {
-    private final static int PERMISSION_LOCATION_REQUEST_CODE = 11;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_contact_number);
-        showPermissionDialog();
+        PermissionsManager.showPermissionDialog(this.getBaseContext(),this);
     }
 
 
@@ -39,20 +39,5 @@ public class ContactNumberActivity extends AppCompatActivity {
                     }
                 })
                 .show();
-    }
-
-
-    private void showPermissionDialog() {
-        if (!GPSTracker.checkPermission(this)) {
-            ActivityCompat.requestPermissions(
-                    this,
-                    new String[]{
-                            Manifest.permission.ACCESS_COARSE_LOCATION,
-                            Manifest.permission.ACCESS_FINE_LOCATION,
-                            Manifest.permission.READ_CONTACTS,
-                            Manifest.permission.SEND_SMS,
-                    },
-                    PERMISSION_LOCATION_REQUEST_CODE);
-        }
     }
 }

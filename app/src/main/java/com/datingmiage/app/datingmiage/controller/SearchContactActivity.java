@@ -22,7 +22,7 @@ public class SearchContactActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search_contact);
-        showPermissionDialog();
+        PermissionsManager.showPermissionDialog(this.getBaseContext(),this);
         startActivityForResult(new Intent(this, ContactPickerActivity.class), 1302);
     }
 
@@ -63,19 +63,5 @@ public class SearchContactActivity extends Activity {
                     }
                 })
                 .show();
-    }
-
-    private void showPermissionDialog() {
-        if (!GPSTracker.checkPermission(this)) {
-            ActivityCompat.requestPermissions(
-                    this,
-                    new String[]{
-                            Manifest.permission.ACCESS_COARSE_LOCATION,
-                            Manifest.permission.ACCESS_FINE_LOCATION,
-                            Manifest.permission.READ_CONTACTS,
-                            Manifest.permission.SEND_SMS,
-                    },
-                    PERMISSION_LOCATION_REQUEST_CODE);
-        }
     }
 }

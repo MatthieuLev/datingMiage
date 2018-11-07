@@ -25,9 +25,9 @@ import android.util.Log;
  * matthieu.lev@gmail.com
  * on 01-nov-18.
  *
-**/
+ **/
 
- public class GPSTracker extends Service implements LocationListener {
+public class GPSTracker extends Service implements LocationListener {
     // The minimum distance to change Updates in meters
     private static final long MIN_DISTANCE_CHANGE_FOR_UPDATES = 10; // 10 meters
     // The minimum time between updates in milliseconds
@@ -67,7 +67,7 @@ import android.util.Log;
             isNetworkEnabled = locationManager
                     .isProviderEnabled(LocationManager.NETWORK_PROVIDER);
 
-            if (!isGPSEnabled && !isNetworkEnabled && !checkPermission(this.mContext)) {
+            if (!isGPSEnabled && !isNetworkEnabled && !PermissionsManager.checkPermission(this.mContext)) {
                 // No network provider is enabled
             } else {
                 this.canGetLocation = true;
@@ -205,10 +205,4 @@ import android.util.Log;
         return null;
     }
 
-    public static boolean checkPermission(final Context context) {
-        return ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
-                && ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED
-                && ActivityCompat.checkSelfPermission(context,Manifest.permission.READ_CONTACTS) == PackageManager.PERMISSION_GRANTED
-                && ActivityCompat.checkSelfPermission(context,Manifest.permission.SEND_SMS) == PackageManager.PERMISSION_GRANTED;
-    }
 }
