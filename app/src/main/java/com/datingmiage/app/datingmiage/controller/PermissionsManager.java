@@ -17,6 +17,7 @@ public class PermissionsManager {
                             Manifest.permission.ACCESS_COARSE_LOCATION,
                             Manifest.permission.ACCESS_FINE_LOCATION,
                             Manifest.permission.READ_CONTACTS,
+                            Manifest.permission.RECEIVE_SMS,
                             Manifest.permission.SEND_SMS,
                             Manifest.permission.READ_SMS,
                     },
@@ -29,6 +30,7 @@ public class PermissionsManager {
                 && ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED
                 && ActivityCompat.checkSelfPermission(context,Manifest.permission.READ_CONTACTS) == PackageManager.PERMISSION_GRANTED
                 && ActivityCompat.checkSelfPermission(context,Manifest.permission.READ_SMS) == PackageManager.PERMISSION_GRANTED
+                && ActivityCompat.checkSelfPermission(context,Manifest.permission.RECEIVE_SMS) == PackageManager.PERMISSION_GRANTED
                 && ActivityCompat.checkSelfPermission(context,Manifest.permission.SEND_SMS) == PackageManager.PERMISSION_GRANTED;
     }
 }
