@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.datingmiage.app.datingmiage">
+    package="fr.miage.app.meetingmiage">
 
+    <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.READ_CONTACTS" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
@@ -11,35 +12,34 @@
 
     <application
         android:allowBackup="true"
-        android:icon="@mipmap/app_icon"
+        android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/app_icon_round"
+        android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".controller.MainActivity">
+        <activity android:name="fr.miage.app.meetingmiage.MeetingCreationActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
                 <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".controller.ContactNumberActivity" />
-        <activity android:name=".controller.SearchContactActivity" />
-        <activity android:name=".contactsMultiPickerLibrary.ContactPickerActivity" />
+
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyBci55jNrmP8lU-y09bfkqDtG717kRKW6o" />
 
         <receiver
-            android:name=".controller.IncomingSms"
+            android:name="fr.miage.app.meetingmiage.SmsReceiver"
             android:enabled="true"
-            android:exported="true" >
+            android:exported="true">
             <intent-filter android:priority="1000">
                 <action android:name="android.provider.Telephony.SMS_RECEIVED" />
             </intent-filter>
         </receiver>
 
-        <service
-            android:name=".controller.GPSTracker"
-            android:enabled="true"
-            android:exported="true" />
+        <activity android:name="fr.miage.app.meetingmiage.ReceptionActivity"></activity>
     </application>
 
 </manifest>
