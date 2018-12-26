@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.TextView;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -16,6 +17,8 @@ import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+
+import org.w3c.dom.Text;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -47,6 +50,10 @@ public class ReceptionActivity extends AppCompatActivity {
         alertDialog.setTitle("SUGGESTED MEETING DATE");
         LayoutInflater layoutInflater = LayoutInflater.from(this);
         View promptView = layoutInflater.inflate(R.layout.dialog_map, null);
+
+        TextView tvMaps= promptView.findViewById(R.id.tvMaps);
+        tvMaps.setText(message);
+
         alertDialog.setView(promptView);
 
         MapView mMapView = (MapView) promptView.findViewById(R.id.mapView);
