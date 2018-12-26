@@ -24,9 +24,10 @@
 
     <ScrollView
         android:id="@+id/scrollView2"
+        app:layout_constraintTop_toTopOf="parent"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp">
+        android:layout_marginTop="32dp">
 
         <TableLayout
             android:layout_width="match_parent"
@@ -265,29 +266,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="55dp"
-                    android:layout_gravity="top|center"
-                    android:layout_marginLeft="8dp"
-                    android:layout_marginRight="8dp"
-                    android:contentDescription="@string/notesPicDesc"
-                    android:src="@drawable/ic_note" />
-
-                <EditText
-                    android:id="@+id/editTextMeetingNote"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@android:color/transparent"
-                    android:fontFamily="sans-serif-light"
-                    android:hint="@string/notesHint"
-                    android:importantForAutofill="no"
-                    android:inputType="textCapSentences|textMultiLine"
-                    android:padding="16dp"
-                    android:textColor="@android:color/black"
-                    android:textSize="18sp"
-                    tools:targetApi="o" />
 
             </LinearLayout>
         </TableLayout>

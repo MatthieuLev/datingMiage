@@ -2,7 +2,6 @@
     <string name="app_name">Meeting Miage App</string>
     <string name="meetingCreationTitle">Create a Meeting</string>
     <string name="locationLabel">SELECT A LOCATION</string>
-    <string name="notesHint">Notes</string>
     <string name="currentDateHint">Current Date</string>
     <string name="currentTimeHint">Current Time</string>
     <string name="addContactLabel">ADD CONTACT</string>
@@ -10,6 +9,5 @@
     <string name="locationPicDesc">Location picture</string>
     <string name="contactPicDesc">Contact picture</string>
     <string name="timePicDesc">Time picture</string>
-    <string name="notesPicDesc">Notes picture</string>
     <string name="sendMeeting">Send meeting request</string>
 </resources>

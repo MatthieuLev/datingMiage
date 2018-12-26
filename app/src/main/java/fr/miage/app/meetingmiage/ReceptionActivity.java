@@ -21,7 +21,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class ReceptionActivity extends AppCompatActivity {
-    String phoneNumber, message, lat, lng;
+    String phoneNumber, message, lat, lng, phoneNumberSender;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,6 +35,8 @@ public class ReceptionActivity extends AppCompatActivity {
         String latlng = regexCoordinate();
         lat = latlng.split(",")[0];
         lng = latlng.split(",")[1];
+
+        phoneNumberSender = regexPhoneNumber();
 
         askingDialog();
 
@@ -68,12 +70,13 @@ public class ReceptionActivity extends AppCompatActivity {
         alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "ACCEPT", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                SmsSender.sendSMS(self_, phoneNumber, "");
+                SmsSender.sendSMS(self_, phoneNumber, "MeetingMiage : " + phoneNumberSender + " accept your invitation");
             }
         });
         alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "REFUSE", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
+                SmsSender.sendSMS(self_, phoneNumber, "MeetingMiage : " + phoneNumberSender + " refuse your invitation");
             }
         });
 
@@ -90,6 +93,12 @@ public class ReceptionActivity extends AppCompatActivity {
         return ret;
     }
     private String regexPhoneNumber(){
-    return "a faire";
+        String ret ="";
+        Pattern coordinates = Pattern.compile("(?:(?:\\+|00)33[\\s.-]{0,3}(?:\\(0\\)[\\s.-]{0,3})?|0)[1-9](?:(?:[\\s.-]?\\d{2}){4}|\\d{2}(?:[\\s.-]?\\d{3}){2})");
+        Matcher m = coordinates.matcher(message);
+        if (m.find()) {
+            ret =  m.group();
+        }
+        return ret;
     }
 }

@@ -37,19 +37,23 @@ public class SmsReceiver extends BroadcastReceiver {
                     String phoneNumber = currentMessage.getDisplayOriginatingAddress();
                     String message = currentMessage.getDisplayMessageBody();
 
-                    pattern = Pattern.compile("(\\-?\\d+(\\.\\d+)?),\\s*(\\-?\\d+(\\.\\d+)?)");
+                    Log.d("myDebug","BroadCastReceiver catch a sms");
+                    pattern = Pattern.compile("MeetingMiage");
                     matcher = pattern.matcher(message);
 
                     while (matcher.find()) {
-                        Log.d("myDebug", "match");
+                        Log.d("myDebug", "sms match with MeetingMiage");
 
                         if (message.contains("asking")) {
-                            Log.d("myDebug", "asking");
+                            Log.d("myDebug", "sms contain asking");
                             redirectionManager(context, phoneNumber, message, "asking");
 
                         } else if (message.contains("accept")) {
-                            Log.d("myDebug", "accept");
+                            Log.d("myDebug", "sms contain accept");
                             redirectionManager(context, phoneNumber, message, "accept");
+                        } else if (message.contains("refuse")){
+                            Log.d("myDebug", "sms contain refuse");
+                            redirectionManager(context,phoneNumber,message,"accept");
                         }
                     }
 

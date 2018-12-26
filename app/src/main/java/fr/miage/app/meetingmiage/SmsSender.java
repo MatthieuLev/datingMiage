@@ -2,6 +2,7 @@ package fr.miage.app.meetingmiage;
 
 import android.content.Context;
 import android.telephony.SmsManager;
+import android.util.Log;
 import android.widget.Toast;
 
 import java.util.regex.Matcher;
@@ -22,6 +23,7 @@ class SmsSender {
             Toast.makeText(context, "Number " + numero + " is not valide " + numero, Toast.LENGTH_SHORT).show();
             message = "Number " + numero + " is not valide " + numero;
         } else {
+            Log.d("myDebug",numero + " " + message);
             SmsManager.getDefault().sendTextMessage(numero, null, message, null, null);
         }
         return message;

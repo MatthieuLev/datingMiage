@@ -39,7 +39,6 @@ public class MeetingCreationActivity extends AppCompatActivity {
     private static final int CONTACT_PICKER_REQUEST = 2;
     private LinearLayout linearLayoutContacts, linearLayoutPhoneNb;
     private MutableDateTime startDateTime, endDateTime;
-    private EditText editTextNote;
     private Button buttonStartDate, buttonStartTime, buttonEndTime, buttonLocation;
     private double latitude, longitude;
     private ArrayList<String> phonesNumbers;
@@ -60,7 +59,6 @@ public class MeetingCreationActivity extends AppCompatActivity {
         buttonStartTime = findViewById(R.id.buttonStartTime);
         buttonEndTime = findViewById(R.id.buttonEndTime);
         buttonLocation = findViewById(R.id.buttonLocation);
-        editTextNote = findViewById(R.id.editTextMeetingNote);
         refreshDates();
     }
 
@@ -182,7 +180,7 @@ public class MeetingCreationActivity extends AppCompatActivity {
     }
 
     public void sendMeeting(View view) {
-        Log.d("myDebug", phonesNumbers.toString());
+        Log.d("myDebug", "Sms will be send to : " + phonesNumbers.toString());
         if (phonesNumbers.size() < 1) {
             Toast.makeText(this, "You have not added a contact or number", Toast.LENGTH_LONG).show();
         } else {
@@ -196,10 +194,8 @@ public class MeetingCreationActivity extends AppCompatActivity {
         String date = buttonStartDate.getText().toString() + " \nfrom "
                 + buttonStartTime.getText().toString() + " \nto "
                 + buttonEndTime.getText().toString();
-        String notes = editTextNote.getText().toString();
-        String message = "I'm asking you out on a meeting at the coordinates \n" + latitude + ",\n" + longitude
-                + "\n on : " + date
-                + "\n notes : " + notes;
+        String message = "MeetingMiage : I'm asking you out on a meeting at the coordinates \n" + latitude + ",\n" + longitude
+                + "\n on : " + date;
         SmsSender.sendSMS(this, numero, message);
         new AlertDialog.Builder(this)
                 .setMessage(message)
