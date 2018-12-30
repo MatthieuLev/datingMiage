@@ -6,10 +6,12 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.TextView;
 
+import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
@@ -24,7 +26,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class ReceptionActivity extends AppCompatActivity {
-    String phoneNumber, message, lat, lng, phoneNumberSender;
+    String phoneNumber, message, lat, lng;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,31 +37,23 @@ public class ReceptionActivity extends AppCompatActivity {
         Intent intent = getIntent();
         phoneNumber = intent.getExtras().getString("phoneNumber");
         message = intent.getExtras().getString("message");
+        message = message.replace("MeetingMiage", phoneNumber);
         String latlng = regexCoordinate();
         lat = latlng.split(",")[0];
         lng = latlng.split(",")[1];
 
-        phoneNumberSender = regexPhoneNumber();
-
-        askingDialog();
+        askingDialog(savedInstanceState);
 
     }
 
-    private void askingDialog() {
-        AlertDialog alertDialog = new AlertDialog.Builder(this).create();
-        alertDialog.setTitle("SUGGESTED MEETING DATE");
-        LayoutInflater layoutInflater = LayoutInflater.from(this);
-        View promptView = layoutInflater.inflate(R.layout.dialog_map, null);
-
-        TextView tvMaps= promptView.findViewById(R.id.tvMaps);
+    private void askingDialog(Bundle savedInstanceState) {
+        TextView tvMaps= findViewById(R.id.tvMaps);
         tvMaps.setText(message);
 
-        alertDialog.setView(promptView);
-
-        MapView mMapView = (MapView) promptView.findViewById(R.id.mapView);
+        MapView mMapView = findViewById(R.id.mapView);
         MapsInitializer.initialize(this);
 
-        mMapView.onCreate(alertDialog.onSaveInstanceState());
+        mMapView.onCreate(savedInstanceState);
         mMapView.onResume();
 
         mMapView.getMapAsync(new OnMapReadyCallback() {
@@ -67,41 +61,24 @@ public class ReceptionActivity extends AppCompatActivity {
             public void onMapReady(final GoogleMap googleMap) {
                 LatLng pos = new LatLng(Double.parseDouble(lat), Double.parseDouble(lng)); ////your lat lng
                 googleMap.addMarker(new MarkerOptions().position(pos).title("Meeting"));
-                googleMap.moveCamera(CameraUpdateFactory.newLatLng(pos));
                 googleMap.getUiSettings().setZoomControlsEnabled(true);
-                googleMap.animateCamera(CameraUpdateFactory.zoomTo(15), 2000, null);
+                LatLng coordinate = new LatLng(Double.parseDouble(lat), Double.parseDouble(lng));
+                CameraUpdate yourLocation = CameraUpdateFactory.newLatLngZoom(coordinate, 11.0f);
+                googleMap.animateCamera(yourLocation);
             }
-        });
+        });;
+    }
 
-        final Context self_ = this;
-        alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "ACCEPT", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                SmsSender.sendSMS(self_, phoneNumber, "MeetingMiage : " + phoneNumberSender + " accept your invitation");
-            }
-        });
-        alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "REFUSE", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                SmsSender.sendSMS(self_, phoneNumber, "MeetingMiage : " + phoneNumberSender + " refuse your invitation");
-            }
-        });
-
-        alertDialog.show();
+    public void acceptMeeting(View view){
+        SmsSender.sendSMS(this, phoneNumber, "MeetingMiage : your contact accept your invitation");
+    }
+    public void refuseMeeting(View view){
+        SmsSender.sendSMS(this, phoneNumber, "MeetingMiage : your contact refuse your invitation");
     }
 
     private String regexCoordinate(){
         String ret ="";
         Pattern coordinates = Pattern.compile("(\\-?\\d+(\\.\\d+)?),\\s*(\\-?\\d+(\\.\\d+)?)");
-        Matcher m = coordinates.matcher(message);
-        if (m.find()) {
-            ret =  m.group();
-        }
-        return ret;
-    }
-    private String regexPhoneNumber(){
-        String ret ="";
-        Pattern coordinates = Pattern.compile("(?:(?:\\+|00)33[\\s.-]{0,3}(?:\\(0\\)[\\s.-]{0,3})?|0)[1-9](?:(?:[\\s.-]?\\d{2}){4}|\\d{2}(?:[\\s.-]?\\d{3}){2})");
         Matcher m = coordinates.matcher(message);
         if (m.find()) {
             ret =  m.group();

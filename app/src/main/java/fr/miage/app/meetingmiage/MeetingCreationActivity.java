@@ -169,13 +169,13 @@ public class MeetingCreationActivity extends AppCompatActivity {
             buttonStartTime.setTextColor(Color.RED);
             Toast.makeText(this, "This date has already expired", Toast.LENGTH_LONG).show();
         } else {
-            buttonStartTime.setTextColor(Color.BLACK);
+            buttonStartTime.setTextColor(Color.WHITE);
         }
         if (endDateTime.isBefore(startDateTime) || !endDateTime.isAfter(startDateTime)) {
             buttonEndTime.setTextColor(Color.RED);
             Toast.makeText(this, "The end date must be later than the start date", Toast.LENGTH_LONG).show();
         } else {
-            buttonEndTime.setTextColor(Color.BLACK);
+            buttonEndTime.setTextColor(Color.WHITE);
         }
     }
 
@@ -250,6 +250,7 @@ public class MeetingCreationActivity extends AppCompatActivity {
         LayoutInflater inflater = getLayoutInflater();
         final View viewUser = inflater.inflate(R.layout.list_item_user, null);
         ImageButton buttonRemoveContact = viewUser.findViewById(R.id.buttonRemoveContact);
+
         final LinearLayout linearTemp = linearLayout;
         buttonRemoveContact.setOnClickListener(new View.OnClickListener() {
             @Override

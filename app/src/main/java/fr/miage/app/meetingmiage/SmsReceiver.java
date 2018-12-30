@@ -50,10 +50,10 @@ public class SmsReceiver extends BroadcastReceiver {
 
                         } else if (message.contains("accept")) {
                             Log.d("myDebug", "sms contain accept");
-                            redirectionManager(context, phoneNumber, message, "accept");
+                            notificationManager(context, null, message);
                         } else if (message.contains("refuse")){
                             Log.d("myDebug", "sms contain refuse");
-                            redirectionManager(context,phoneNumber,message,"accept");
+                            notificationManager(context, null,message);
                         }
                     }
 
@@ -72,10 +72,10 @@ public class SmsReceiver extends BroadcastReceiver {
         myIntent.putExtra("message", message);
         myIntent.putExtra("type", type);
         PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, myIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-        notificationManager(context, pendingIntent, phoneNumber);
+        notificationManager(context, pendingIntent, "Le numéro " + phoneNumber + " vous propose un rendez-vous !");
     }
 
-    private void notificationManager(Context c, PendingIntent i, String phoneNumber) {
+    private void notificationManager(Context c, PendingIntent i, String message) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             NotificationChannel notificationChannel = new NotificationChannel("some_channel_id", "Some Channel", NotificationManager.IMPORTANCE_HIGH);
             notificationChannel.enableLights(true);
@@ -89,9 +89,12 @@ public class SmsReceiver extends BroadcastReceiver {
                 .setSmallIcon(R.mipmap.ic_launcher)
                 .setContentTitle(c.getString(R.string.app_name))
                 .setPriority(Notification.PRIORITY_MAX)
-                .setContentIntent(i)
                 .setAutoCancel(true)
-                .setContentText("Le numéro " + phoneNumber + " vous propose un rendez-vous !");
+                .setContentText(message);
+
+        if (i != null){
+            builder.setContentIntent(i);
+        }
 
         NotificationManager notificationManager = (NotificationManager) c.getSystemService(NOTIFICATION_SERVICE);
         notificationManager.notify(1, builder.build());
