@@ -29,6 +29,8 @@ import com.google.android.gms.common.GooglePlayServicesRepairableException;
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlacePicker;
 
+import org.joda.time.DateTime;
+import org.joda.time.DateTimeZone;
 import org.joda.time.MutableDateTime;
 
 import java.util.ArrayList;
@@ -63,16 +65,11 @@ public class MeetingCreationActivity extends AppCompatActivity {
     }
 
     private void resetMeeting() {
-        Calendar cStart = Calendar.getInstance();
-        Calendar cEnd = Calendar.getInstance();
-        cStart.add(Calendar.HOUR_OF_DAY, 1);
-        cEnd.add(Calendar.HOUR_OF_DAY, 2);
+        startDateTime = new MutableDateTime(new DateTime());
+        endDateTime = new MutableDateTime(new DateTime());
+        startDateTime.addHours(1);
+        endDateTime.addHours(2);
 
-        startDateTime = new MutableDateTime(cStart.get(Calendar.YEAR), cStart.get(Calendar.MONTH), cStart.get(Calendar.DAY_OF_MONTH), cStart.get(Calendar.HOUR_OF_DAY), 0, 0, 0);
-        endDateTime = new MutableDateTime(cEnd.get(Calendar.YEAR), cEnd.get(Calendar.MONTH), cEnd.get(Calendar.DAY_OF_MONTH), cEnd.get(Calendar.HOUR_OF_DAY), 0, 0, 0);
-
-        startDateTime.addMonths(1);
-        endDateTime.addMonths(1);
     }
 
     public void addContact(View view) {
@@ -199,7 +196,7 @@ public class MeetingCreationActivity extends AppCompatActivity {
         SmsSender.sendSMS(this, numero, message);
         new AlertDialog.Builder(this)
                 .setMessage(message)
-                .setPositiveButton("Retourner au menu principal", new DialogInterface.OnClickListener() {
+                .setPositiveButton("Back to the meeting creation menu", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.cancel();

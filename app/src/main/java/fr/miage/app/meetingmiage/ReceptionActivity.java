@@ -70,10 +70,14 @@ public class ReceptionActivity extends AppCompatActivity {
     }
 
     public void acceptMeeting(View view){
+        String msg = "Your contact is notified of your acceptance";
         SmsSender.sendSMS(this, phoneNumber, "MeetingMiage : your contact accept your invitation");
+        returnToMeetingCreation(msg);
     }
     public void refuseMeeting(View view){
+        String msg = "Your contact is informed of your rejection";
         SmsSender.sendSMS(this, phoneNumber, "MeetingMiage : your contact refuse your invitation");
+        returnToMeetingCreation(msg);
     }
 
     private String regexCoordinate(){
@@ -84,5 +88,17 @@ public class ReceptionActivity extends AppCompatActivity {
             ret =  m.group();
         }
         return ret;
+    }
+
+    private void returnToMeetingCreation(String msg){
+        new AlertDialog.Builder(this)
+                .setMessage(msg)
+                .setPositiveButton("Leave", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        finish();
+                    }
+                })
+                .show();
     }
 }
