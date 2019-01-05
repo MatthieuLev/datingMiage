@@ -66,17 +66,17 @@ public class ReceptionActivity extends AppCompatActivity {
                 CameraUpdate yourLocation = CameraUpdateFactory.newLatLngZoom(coordinate, 11.0f);
                 googleMap.animateCamera(yourLocation);
             }
-        });;
+        });
     }
 
     public void acceptMeeting(View view){
         String msg = "Your contact is notified of your acceptance";
-        SmsSender.sendSMS(this, phoneNumber, "MeetingMiage : your contact accept your invitation");
+        SmsSender.sendSMS(phoneNumber, "MeetingMiage : your contact accept your invitation");
         returnToMeetingCreation(msg);
     }
     public void refuseMeeting(View view){
         String msg = "Your contact is informed of your rejection";
-        SmsSender.sendSMS(this, phoneNumber, "MeetingMiage : your contact refuse your invitation");
+        SmsSender.sendSMS(phoneNumber, "MeetingMiage : your contact refuse your invitation");
         returnToMeetingCreation(msg);
     }
 

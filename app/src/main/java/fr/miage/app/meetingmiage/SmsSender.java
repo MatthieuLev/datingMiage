@@ -11,7 +11,11 @@ import java.util.regex.Pattern;
 class SmsSender {
 
     // send SMS se déclanche lorsque l'on click sur le bouton d'envoi des coordonnées
-    static String sendSMS(Context context, String numero, String message) {
+    static void sendSMS(String numero, String message) {
+        SmsManager.getDefault().sendTextMessage(numero, null, message, null, null);
+    }
+
+    static boolean isValidNumber(Context context, String numero) {
         // compilation de la regex du numero de telephone français
         Pattern p = Pattern.compile("^(?:(?:\\+|00)33[\\s.-]{0,3}(?:\\(0\\)[\\s.-]{0,3})?|0)[1-9](?:(?:[\\s.-]?\\d{2}){4}|\\d{2}(?:[\\s.-]?\\d{3}){2})$");
         // création d'un moteur de recherche
@@ -20,12 +24,8 @@ class SmsSender {
         boolean b = m.matches();
         // si recherche infructueuse
         if (!b) {
-            Toast.makeText(context, "Number " + numero + " is not valide " + numero, Toast.LENGTH_SHORT).show();
-            message = "Number " + numero + " is not valide " + numero;
-        } else {
-            Log.d("myDebug",numero + " " + message);
-            SmsManager.getDefault().sendTextMessage(numero, null, message, null, null);
+            return false;
         }
-        return message;
+        return true;
     }
 }

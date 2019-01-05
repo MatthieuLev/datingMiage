@@ -30,11 +30,9 @@ import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlacePicker;
 
 import org.joda.time.DateTime;
-import org.joda.time.DateTimeZone;
 import org.joda.time.MutableDateTime;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 
 public class MeetingCreationActivity extends AppCompatActivity {
     private static final int PLACE_PICKER_REQUEST = 1;
@@ -44,6 +42,8 @@ public class MeetingCreationActivity extends AppCompatActivity {
     private Button buttonStartDate, buttonStartTime, buttonEndTime, buttonLocation;
     private double latitude, longitude;
     private ArrayList<String> phonesNumbers;
+    private boolean isStartDateValid,isEndDateValid;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,6 +64,7 @@ public class MeetingCreationActivity extends AppCompatActivity {
         refreshDates();
     }
 
+
     private void resetMeeting() {
         startDateTime = new MutableDateTime(new DateTime());
         endDateTime = new MutableDateTime(new DateTime());
@@ -72,11 +73,13 @@ public class MeetingCreationActivity extends AppCompatActivity {
 
     }
 
+
     public void addContact(View view) {
         Intent pickContactIntent = new Intent(Intent.ACTION_PICK, Uri.parse("content://contacts"));
         pickContactIntent.setType(ContactsContract.CommonDataKinds.Phone.CONTENT_TYPE); // Show user only contacts w/ phone numbers
         startActivityForResult(pickContactIntent, CONTACT_PICKER_REQUEST);
     }
+
 
     public void addPhoneNb(View view) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -165,27 +168,59 @@ public class MeetingCreationActivity extends AppCompatActivity {
         if (startDateTime.isBeforeNow()) {
             buttonStartTime.setTextColor(Color.RED);
             Toast.makeText(this, "This date has already expired", Toast.LENGTH_LONG).show();
+            isStartDateValid = false;
         } else {
             buttonStartTime.setTextColor(Color.WHITE);
+            isStartDateValid = true;
         }
         if (endDateTime.isBefore(startDateTime) || !endDateTime.isAfter(startDateTime)) {
             buttonEndTime.setTextColor(Color.RED);
             Toast.makeText(this, "The end date must be later than the start date", Toast.LENGTH_LONG).show();
+            isEndDateValid = false;
         } else {
             buttonEndTime.setTextColor(Color.WHITE);
+            isEndDateValid = true;
         }
     }
 
+
     public void sendMeeting(View view) {
+        boolean allChecksAreOk = true;
         Log.d("myDebug", "Sms will be send to : " + phonesNumbers.toString());
+
         if (phonesNumbers.size() < 1) {
             Toast.makeText(this, "You have not added a contact or number", Toast.LENGTH_LONG).show();
-        } else {
+            Log.d("myDebug", "You have not added a contact or number");
+            allChecksAreOk = false;
+        }
+
+        if (buttonLocation.getText().equals(getResources().getString(R.string.locationLabel))){
+            Toast.makeText(this, "You have to select a location", Toast.LENGTH_LONG).show();
+            Log.d("myDebug", "You have to select a location " + buttonLocation.getText());
+            allChecksAreOk = false;
+        }
+
+        if (!isStartDateValid || !isEndDateValid){
+            Toast.makeText(this, "You have to select a valid date", Toast.LENGTH_LONG).show();
+            Log.d("myDebug", "You have to select a valid date");
+            allChecksAreOk = false;
+        }
+
+        for (String number : phonesNumbers) {
+            if (!(SmsSender.isValidNumber(this,number))){
+                Toast.makeText(this, number + " is not a valid number", Toast.LENGTH_LONG).show();
+                allChecksAreOk = false;
+            }
+        }
+
+        if (allChecksAreOk) {
+            Log.d("myDebug","All checks are ok");
             for (String number : phonesNumbers) {
                 sendSMSForRDV(number);
             }
         }
     }
+
 
     private void sendSMSForRDV(String numero) {
         String date = buttonStartDate.getText().toString() + " \nfrom "
@@ -193,7 +228,7 @@ public class MeetingCreationActivity extends AppCompatActivity {
                 + buttonEndTime.getText().toString();
         String message = "MeetingMiage : I'm asking you out on a meeting at the coordinates \n" + latitude + ",\n" + longitude
                 + "\n on : " + date;
-        SmsSender.sendSMS(this, numero, message);
+        SmsSender.sendSMS( numero, message);
         new AlertDialog.Builder(this)
                 .setMessage(message)
                 .setPositiveButton("Back to the meeting creation menu", new DialogInterface.OnClickListener() {
@@ -204,6 +239,7 @@ public class MeetingCreationActivity extends AppCompatActivity {
                 })
                 .show();
     }
+
 
     protected void onActivityResult(int requestCode, int resultCode, Intent resultIntent) {
         switch (requestCode) {
@@ -243,7 +279,8 @@ public class MeetingCreationActivity extends AppCompatActivity {
         }
     }
 
-    private void addToLinearLayout(LinearLayout linearLayout, String name) {
+
+    private void addToLinearLayout(LinearLayout linearLayout, final String number) {
         LayoutInflater inflater = getLayoutInflater();
         final View viewUser = inflater.inflate(R.layout.list_item_user, null);
         ImageButton buttonRemoveContact = viewUser.findViewById(R.id.buttonRemoveContact);
@@ -252,11 +289,13 @@ public class MeetingCreationActivity extends AppCompatActivity {
         buttonRemoveContact.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                phonesNumbers.remove(number);
+                Log.d("myDebug", "Remove " + number);
                 linearTemp.removeView(viewUser);
             }
         });
         TextView textViewUserName = viewUser.findViewById(R.id.textViewUserDisplayName);
-        textViewUserName.setText(name);
+        textViewUserName.setText(number);
         linearLayout.addView(viewUser);
     }
 }
